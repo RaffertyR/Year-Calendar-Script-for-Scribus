@@ -1,4 +1,4 @@
-# Year-Calendar-Script-for-Scribus
+# Year-Calendar-Script-for-Scribus (for Scribus 1.5.6+)
 Generates a 12-months calendar on one page in pdf or image format. 
 Can be used to create credit card sized calendar, school year calendar, wall calendar, etc.
 (see examples below).
@@ -23,6 +23,6 @@ Can be used to create credit card sized calendar, school year calendar, wall cal
 Many build-in controls.
 Parts of this script are taken from the MonthlyCalendar script for Scribus.
 
-# instructions file will follow!
+# Please read the instructions file!
 
 ![year_calendars](year_calendars.jpg)

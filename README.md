@@ -5,7 +5,8 @@ Can be used to create credit card sized calendar, school year calendar, wall cal
 
 1) You can choose between more than 20 languages (default is English). 
 2) You can choose your font from the list of fonts available on your system. You can change
-   fonts of many items afterwards in the Styles menu (Edit - Styles).
+   fonts of many items afterwards in the Styles menu (Edit - Styles). Default font is 
+   Symbola font (https://fontlibrary.org/en/font/symbola).
 3) Calendar year, start month and week starting day are to be given. Saturdays and Sundays will 
    be printed in separate colors (many colors can be changed afterwards with Edit - Colors and Fills).
 4) Option to show week numbers with (or without) a week numbers heading in your local language.

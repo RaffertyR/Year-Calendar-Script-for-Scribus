@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-VERSION: 1.0 of 2021-11-10
+VERSION: 1.1 of 2021-12-09
 AUTHOR: Rafferty River. 
 LICENSE: GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007. 
 This program is distributed in the hope that it will be useful,
@@ -159,14 +159,14 @@ class ScYearCalendar:
         # layers
         self.layerCal = 'Calendar'
         # character styles
-        self.cStylMonth = "char_style_Month"
+        self.cStylMonthHeading = "char_style_MonthHeading"
         self.cStylDayNames = "char_style_DayNames"
         self.cStylWeekNo = "char_style_WeekNo"
         self.cStylHolidays = "char_style_Holidays"
         self.cStylDate = "char_style_Date"
         self.cStylLegend = "char_style_Legend"
         # paragraph styles
-        self.pStyleMonth = "par_style_Month"
+        self.pStyleMonthHeading = "par_style_MonthHeading"
         self.pStyleDayNames = "par_style_DayNames"
         self.pStyleWeekNo = "par_style_WeekNo"
         self.pStyleHolidays = "par_style_Holidays"
@@ -174,7 +174,9 @@ class ScYearCalendar:
         self.pStyleLegend = "par_style_Legend"
         # line styles
         self.gridLineStyle = "grid_Line_Style"
-        self.gridMonthHeadingStyle = "grid_Month_Heading_Style"
+        self.gridLineStyleDayNames = "grid_DayNames_Style"
+        self.gridLineStyleWeekNo = "grid_WeekNo_Style"
+        self.gridLineStyleMonthHeading = "grid_MonthHeading_Style"
         # other settings
         calendar.setfirstweekday(firstDay)
         progressTotal(len(months))
@@ -267,18 +269,20 @@ class ScYearCalendar:
         defineColorCMYK("fillDate", 0, 0, 0, 0) # default is White
         defineColorCMYK("txtDate", 0, 0, 0, 255) # default is Black
         defineColorCMYK("fillWeekend", 0, 0, 0, 25) # default is Light Grey
+        defineColorCMYK("fillWeekend2", 0, 0, 0, 25) # default is Light Grey
         defineColorCMYK("txtWeekend", 0, 0, 0, 200) # default is Dark Grey
-        defineColorCMYK("fillWeekend2", 0, 0, 0, 0) # default is White
         defineColorCMYK("fillHoliday", 0, 0, 0, 25) # default is Light Grey
         defineColorCMYK("txtHoliday", 0, 234, 246, 0) # default is Red
         defineColorCMYK("fillSpecialDate", 0, 0, 0, 0) # default is White
         defineColorCMYK("txtSpecialDate", 0, 0, 0, 128) # default is Middle Grey
         defineColorCMYK("fillVacation", 0, 0, 0, 25) # default is Light Grey
         defineColorCMYK("txtVacation", 0, 0, 0, 255) # default is Black
-        defineColorCMYK("gridColor", 0, 0, 0, 200) # default is Dark Grey
-        defineColorCMYK("gridMonthHeading", 0, 0, 0, 200) # default is Dark Grey
+        defineColorCMYK("gridColor", 0, 0, 0, 128) # default is Middle Grey
+        defineColorCMYK("gridMonthHeading", 0, 0, 0, 0) # default is White
+        defineColorCMYK("gridDayNames", 0, 0, 0, 128) # default is Middle Grey
+        defineColorCMYK("gridWeekNo", 0, 0, 0, 128) # default is Middle Grey
         # styles
-        scribus.createCharStyle(name=self.cStylMonth, font=self.cFont,
+        scribus.createCharStyle(name=self.cStylMonthHeading, font=self.cFont,
             fontsize=(self.rowSize // 1.5), fillcolor="txtMonthHeading")
         scribus.createCharStyle(name=self.cStylDayNames, font=self.cFont,
             fontsize=(self.rowSize // 2), fillcolor="txtDayNames")
@@ -290,8 +294,8 @@ class ScYearCalendar:
             fontsize=(self.rowSize // 2), fillcolor="txtDate")
         scribus.createCharStyle(name=self.cStylLegend, font=self.cFont,
             fontsize=(self.rowSize // 2), fillcolor="txtDate")
-        scribus.createParagraphStyle(name=self.pStyleMonth, linespacingmode=2,
-            alignment=ALIGN_CENTERED, charstyle=self.cStylMonth)
+        scribus.createParagraphStyle(name=self.pStyleMonthHeading, linespacingmode=2,
+            alignment=ALIGN_CENTERED, charstyle=self.cStylMonthHeading)
         scribus.createParagraphStyle(name=self.pStyleDayNames, linespacingmode=2,
             alignment=ALIGN_CENTERED, charstyle=self.cStylDayNames)
         scribus.createParagraphStyle(name=self.pStyleWeekNo,  linespacingmode=2,
@@ -309,9 +313,21 @@ class ScYearCalendar:
                 'Width': 0.25
             }
         ]);
-        scribus.createCustomLineStyle(self.gridMonthHeadingStyle, [
+        scribus.createCustomLineStyle(self.gridLineStyleMonthHeading, [
             {
                 'Color': "gridMonthHeading",
+                'Width': 0.25
+            }
+        ]);
+        scribus.createCustomLineStyle(self.gridLineStyleDayNames, [
+            {
+                'Color': "gridDayNames",
+                'Width': 0.25
+            }
+        ]);
+        scribus.createCustomLineStyle(self.gridLineStyleWeekNo, [
+            {
+                'Color': "gridWeekNo",
                 'Width': 0.25
             }
         ]);
@@ -364,7 +380,7 @@ class ScYearCalendar:
                 yr, mt, dt = str((week[0])).split("-")
                 setText(str(datetime.date(int(yr), int(mt), int(dt)).isocalendar()[1]), cel)
                 setFillColor("fillWeekNo", cel)
-                setCustomLineStyle(self.gridLineStyle, cel)
+                setCustomLineStyle(self.gridLineStyleWeekNo, cel)
                 deselectAll()
                 selectObject(cel)
                 setParagraphStyle(self.pStyleWeekNo, cel)
@@ -435,10 +451,10 @@ class ScYearCalendar:
         mtHd = monthName
         setText(mtHd.upper() + " " + str(self.year), cel)
         setFillColor("fillMonthHeading", cel)
-        setCustomLineStyle(self.gridMonthHeadingStyle, cel)
+        setCustomLineStyle(self.gridLineStyleMonthHeading, cel)
         deselectAll()
         selectObject(cel)
-        setParagraphStyle(self.pStyleMonth, cel)
+        setParagraphStyle(self.pStyleMonthHeading, cel)
         setTextVerticalAlignment(ALIGNV_TOP, cel)
         self.rowCnt += 1
         if self.weekNr:
@@ -450,7 +466,7 @@ class ScYearCalendar:
             except:
                 pass
             setFillColor("fillWeekNo", cel)
-            setCustomLineStyle(self.gridLineStyle, cel)
+            setCustomLineStyle(self.gridLineStyleWeekNo, cel)
             deselectAll()
             selectObject(cel)
             setParagraphStyle(self.pStyleWeekNo, cel)
@@ -462,7 +478,7 @@ class ScYearCalendar:
                 self.colSize, self.rowSize)
             setText(j, cel)
             setFillColor("fillDayNames", cel)
-            setCustomLineStyle(self.gridLineStyle, cel)
+            setCustomLineStyle(self.gridLineStyleDayNames, cel)
             deselectAll()
             selectObject(cel)
             setParagraphStyle(self.pStyleDayNames, cel)
